@@ -26,6 +26,7 @@ export function PasswordInput({
         {...props}
       />
       <Button
+        aria-label={showPassword ? "Hide password" : "Show password"}
         type="button"
         size="icon"
         variant="ghost"

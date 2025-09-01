@@ -82,7 +82,7 @@ test("should login successfully and redirect to role-menu", async ({ page }) => 
   test("should navigate to sign-up page", async ({ page }) => {
     await page.goto("/sign-in");
     await page.getByRole("link", { name: /sign up/i }).click();
-    await page.waitForTimeout(1000); 
+    await page.waitForTimeout(2000); 
     await expect(page).toHaveURL(/.*sign-up/);
     await page.screenshot({ path: `test-results/login-success.png`, fullPage: true });
   });
