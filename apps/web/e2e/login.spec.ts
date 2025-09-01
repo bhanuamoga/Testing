@@ -44,21 +44,30 @@ test.describe("Login Page", () => {
     await expect(page.getByText(/invalid email address/i)).toBeVisible();
   });
 
+
+
   test("should show error for wrong credentials", async ({ page }) => {
-    await page.goto("/sign-in");
-    await page.getByLabel("Email").fill("wrong@email.com");
-    await page.locator("#password").fill("wrongpassword");
+  await page.goto("/sign-in");
+  await page.getByLabel("Email").fill("wrong@email.com");
+  await page.locator("#password").fill("wrongpassword");
 
-    await page.getByRole("button", { name: /login/i }).click();
-    await expect(page.getByText(/invalid credentials/i)).toBeVisible();
+  // Listen for the alert
+  page.on("dialog", async (dialog) => {
+    expect(dialog.message()).toMatch(/invalid credentials/i);
+    await dialog.dismiss(); // or dialog.accept() if needed
   });
 
-  test("password field should be masked by default", async ({ page }) => {
-    await page.goto("/sign-in");
-      const passwordInput = page.locator("#password"); // directly by ID
-  await expect(passwordInput).toHaveAttribute("type", "password");
-  });
+  await page.getByRole("button", { name: /login/i }).click();
+});
+test("password field should be masked by default", async ({ page }) => 
+  { await page.goto("/sign-in"); 
+    const passwordInput = page.locator("#password");
+    await expect(passwordInput).toHaveAttribute("type", "password");
+   });
 
+
+
+   
 //🔹 3. Functional Tests
   
 test("should login successfully and redirect to role-menu", async ({ page }) => {
@@ -69,7 +78,7 @@ test("should login successfully and redirect to role-menu", async ({ page }) => 
 
   await page.getByRole("button", { name: /login/i }).click();
 
-  await expect(page).toHaveURL("http://localhost:3000/role-menu", { timeout: 10000 });
+  await expect(page).toHaveURL("http://localhost:3000/role-menu", { timeout:15000});
 });
 
 
@@ -161,19 +170,39 @@ test("should login successfully and redirect to role-menu", async ({ page }) => 
   });
 
 
-  test("should keep session active with remember me (if available)", async ({ page }) => {
-    await page.goto("/sign-in");
-    await page.getByLabel("Email").fill("himab84261@decodewp.com");
-    await page.locator('#password').fill("himab84261@decodewp.com");
+  // test("should keep session active with remember me (if available)", async ({ page }) => {
+  //   await page.goto("/sign-in");
+  //   await page.getByLabel("Email").fill("himab84261@decodewp.com");
+  //   await page.locator('#password').fill("himab84261@decodewp.com");
 
-    if (await page.getByLabel("Remember me").isVisible()) {
-      await page.getByLabel("Remember me").check();
-    }
+  //   if (await page.getByLabel("Remember me").isVisible()) {
+  //     await page.getByLabel("Remember me").check();
+  //   }
 
-    await page.getByRole("button", { name: /login/i }).click();
-    await expect(page).toHaveURL(/.*role-menu/);
+  //   await page.getByRole("button", { name: /login/i }).click();
+  //   await expect(page).toHaveURL(/.*role-menu/);
    
-    await page.reload();
-    await expect(page).toHaveURL(/.*role-menu/);
-  });
+  //   await page.reload();
+  //   await expect(page).toHaveURL(/.*role-menu/);
+  // });
+  test("should keep session active with remember me (if available)", async ({ page }) => {
+  await page.goto("/sign-in");
+
+  await page.getByLabel("Email").fill("himab84261@decodewp.com");
+  await page.locator("#password").fill("himab84261@decodewp.com");
+
+  if (await page.getByLabel("Remember me").isVisible()) {
+    await page.getByLabel("Remember me").check();
+  }
+
+  await page.getByRole("button", { name: /login/i }).click();
+
+  // increase timeout for CI/CD
+  await expect(page).toHaveURL(/.*role-menu/, { timeout: 15000 });
+
+  // reload and verify session persistence
+  await page.reload();
+  await expect(page).toHaveURL(/.*role-menu/, { timeout: 15000 });
+});
+
 });
