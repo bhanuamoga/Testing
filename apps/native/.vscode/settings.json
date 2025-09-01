@@ -1,0 +1,7 @@
+{
+    "nuxt.isNuxtApp": false,
+    "kiroAgent.configureMCP": "Disabled",
+    // "reactNativeTextWatcher.enable": true,
+    // "react-native-text.changeSeverityType": "warning",
+    // "react-native-text.manageTextComponents": ["Text", "MyText"]
+}
