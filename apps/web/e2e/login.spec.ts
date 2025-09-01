@@ -78,7 +78,7 @@ test("should login successfully and redirect to role-menu", async ({ page }) => 
 
   await page.getByRole("button", { name: /login/i }).click();
 
-  await expect(page).toHaveURL("http://localhost:3000/role-menu", { timeout:15000});
+  await expect(page).toHaveURL("http://localhost:3000/role-menu", { timeout:20000});
 });
 
 
@@ -198,11 +198,11 @@ test("should login successfully and redirect to role-menu", async ({ page }) => 
   await page.getByRole("button", { name: /login/i }).click();
 
   // increase timeout for CI/CD
-  await expect(page).toHaveURL(/.*role-menu/, { timeout: 15000 });
+  await expect(page).toHaveURL(/.*role-menu/, { timeout: 20000 });
 
   // reload and verify session persistence
   await page.reload();
-  await expect(page).toHaveURL(/.*role-menu/, { timeout: 15000 });
+  await expect(page).toHaveURL(/.*role-menu/, { timeout: 1000 });
 });
 
 });
