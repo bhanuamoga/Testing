@@ -53,6 +53,7 @@ jobs:
         run: pnpm run dev &
         env:
           NODE_ENV: test
+          AUTH_SECRET: ${{ secrets.AUTH_SECRET }}
           POSTGREST_URL: ${{ secrets.POSTGREST_URL }}
           POSTGRES_AUTH_KEY: ${{ secrets.POSTGRES_AUTH_KEY }}
           NEXT_PUBLIC_API_KEY: ${{ secrets.NEXT_PUBLIC_API_KEY }}
