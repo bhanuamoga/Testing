@@ -77,6 +77,7 @@ jobs:
        
       # 11. Upload screenshots, videos, and traces for failed tests
       - name: Upload Playwright Artifacts (Videos & Screenshots)
+        if: always()  
         uses: actions/upload-artifact@v4
         with:
           name: playwright-test-artifacts
